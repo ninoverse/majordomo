@@ -1,0 +1,64 @@
+name: CI
+
+# The gate definitions live in ninoverse/.github so every Rust repository in the
+# organization runs the same ones. This file only says *when* to run them and
+# what this workspace's MSRV is.
+#
+# The reusable workflow's contract is the justfile: it invokes `just fmt-check`,
+# `just lint`, `just test` and `just deny`, so the cargo invocation behind each
+# gate keeps exactly one definition, here in the justfile.
+#
+# The agentcfg job below is not part of that. It is written in place because
+# `agentcfg check` is not a Rust gate — the Go repositories run the same check
+# with no Rust in sight — and because being managed should cost a repository no
+# workflow file of its own.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Belongs here rather than in the called workflow: inside a called workflow,
+# `github.workflow` still resolves to this caller's name.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    # Pinned to a released version, not @main or a short @v1: @main lands here
+    # with no pull request, and @v1 never moves. Renovate opens the bump.
+    uses: ninoverse/.github/.github/workflows/rust-ci.yml@v1.2.2
+    with:
+      # Must match [workspace.package].rust-version in Cargo.toml. Nothing else
+      # catches a change that breaks it, because rust-toolchain.toml pins the
+      # channel to `stable`.
+      msrv: "1.85"
+
+  # actionlint over the files in this directory, with ShellCheck on their
+  # `run:` blocks. Its check reads `workflows / actionlint`. Pinned like `ci`.
+  workflows:
+    uses: ninoverse/.github/.github/workflows/actionlint.yml@v1.4.0
+
+  # The other direction from the Monday bump pull request: when someone edits
+  # .agentprofile.yml — adds a concern, changes the deployment — the composed
+  # files go stale, and this fails in their own pull request rather than a bot
+  # regenerating them afterwards. The person making the change sees the result,
+  # and the fix is `just agentcfg sync` locally.
+  agentcfg:
+    name: agentcfg check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The fetch-and-run lives in the justfile, like every other command here.
+      # `just agentcfg check` is the same line a contributor types locally,
+      # which is what stops CI and a laptop from disagreeing about the version.
+      - name: Install just
+        run: cargo install --locked just
+
+      - name: Check the composed files against the pinned version
+        run: just agentcfg check

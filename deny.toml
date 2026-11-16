@@ -1,0 +1,32 @@
+[graph]
+all-features = true
+
+[licenses]
+# What the tree actually pulls in, not a wishlist. cargo-deny warns on an
+# allowance nothing matches, so the list stays honest by being checked rather
+# than by being remembered.
+#
+# It is one entry because the template has no dependencies yet, and that entry
+# is this workspace's own crates. The first dependency you add will fail gate 4
+# unless it is MIT — including the MIT OR Apache-2.0 dual licence most of the
+# ecosystem uses, which resolves to MIT here and passes. That failure is the
+# prompt to read the licence and add it on purpose, not a bug:
+#
+#     allow = ["MIT", "Apache-2.0"]
+allow = [
+    "MIT",
+]
+confidence-threshold = 0.93
+
+[advisories]
+yanked = "deny"
+ignore = []
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

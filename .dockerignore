@@ -1,0 +1,30 @@
+# target/ is the whole point of this file — it is gigabytes of build output and
+# copying it into the build context would dwarf the source and bust the cache.
+target/
+**/target/
+
+.git/
+.github/
+.agents/
+.claude/
+.devcontainer/
+.vscode/
+
+# The agentcfg binary `just agentcfg` fetches. Gitignored, so it exists only
+# on a working laptop — which is exactly where `docker build` runs.
+.agentcfg/
+
+Dockerfile
+.dockerignore
+compose.yaml
+README.md
+AGENTS.md
+CLAUDE.md
+CONTRIBUTING.md
+LICENSE
+
+# Never let secrets into an image layer.
+.env
+.env.*
+*.pem
+*.key
