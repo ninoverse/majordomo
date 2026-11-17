@@ -6,7 +6,7 @@ all-features = true
 # allowance nothing matches, so the list stays honest by being checked rather
 # than by being remembered.
 #
-# It is one entry because the template has no dependencies yet, and that entry
+# It is one entry because the workspace has no dependencies yet, and that entry
 # is this workspace's own crates. The first dependency you add will fail gate 4
 # unless it is MIT — including the MIT OR Apache-2.0 dual licence most of the
 # ecosystem uses, which resolves to MIT here and passes. That failure is the

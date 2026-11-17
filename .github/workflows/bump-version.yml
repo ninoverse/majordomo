@@ -11,8 +11,7 @@ name: Bump Version and Tag
 # inherits the version via `version.workspace = true`, so the workspace moves in
 # lockstep.
 #
-# There is no deploy watching for that tag. This repository is a template; the
-# tag exists so someone can point at the version of it they copied.
+# release.yml watches for that tag and builds the majordomo binary from it.
 #
 # Requires an organization-level RELEASE_APP_ID variable and
 # RELEASE_APP_PRIVATE_KEY secret. Without them the run fails immediately with a

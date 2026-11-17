@@ -83,22 +83,6 @@ your work before concluding a task.
 - Transform tasks into verifiable goals (e.g., "Add validation" → "Write tests for invalid inputs, then make them pass").
 - For multi-step tasks, state a brief plan and verify each step independently.
 
-<!-- concerns/template/rules.md · v1.0.1 -->
-# Template repository
-
-This repository is a GitHub template: new projects start as a copy of it, and
-every copy inherits everything here.
-
-- Keep the example code minimal. It demonstrates the conventions and keeps the
-  gates green on a fresh copy; it holds no real business logic.
-- Where the template ships placeholder crates, they exist because the
-  gates fail on an empty workspace and the `Dockerfile` needs a
-  binary to build. Remove a placeholder only once a real crate covers its
-  role, as a change of its own, and point the `Dockerfile` at the real binary in
-  that change.
-- A project created from this template removes `template` from `concerns` in its
-  `.agentprofile.yml`.
-
 <!-- agentcfg:index · v1.0.1 -->
 # Extended rules
 
@@ -106,7 +90,7 @@ Read these when they apply; they are not loaded by default.
 
 **By activity:**
 
-- **Any change that ends in a PR:** [Git flow](.agents/git-flow.md) and [Releases](.agents/tag-only-release.md)
+- **Any change that ends in a PR:** [Git flow](.agents/git-flow.md) and [Releases and CLI conventions](.agents/cli-conventions.md)
 - **Creating branches:** [Branch naming](.agents/branch-naming.md)
 - **Reviewing PRs:** [Code review](.agents/code-review.md) and [Rust code review](.agents/rust-code-review.md)
 - **Committing code:** [Commit message guidelines](.agents/commit-conventions.md)
