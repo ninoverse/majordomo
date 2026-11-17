@@ -65,7 +65,7 @@ Two things that are easy to miss and that the gates will catch:
 
 ## What gets declined
 
-This template biases toward simplicity. Additions that only serve one downstream
+This repository biases toward simplicity. Additions that only serve one downstream
 project, abstractions with a single caller, and configuration for situations that
 have not happened yet are likely to be turned down — see the Behavioral
 Guidelines in [`AGENTS.md`](AGENTS.md).
@@ -78,9 +78,9 @@ squash commit, which is the PR title, and pushes a matching tag.
 subject cuts which release, so the convention is not only documentation: it
 picks the version number.
 
-Nothing deploys on that tag. This is a template; the tag exists so someone can
-point at the version of it they copied. The workflow is not defined here — it
-calls [`ninoverse/.github`](https://github.com/ninoverse/.github) and needs
+`release.yml` builds the `majordomo` binary from that tag and attaches it to the
+GitHub release. Neither workflow is defined here — both call
+[`ninoverse/.github`](https://github.com/ninoverse/.github), and the bump needs
 organization-level app credentials.
 
 Tagging by hand competes with it rather than complementing it. Don't.
@@ -108,15 +108,3 @@ Anything that should change for *every* project — the schedule, the grouping,
 the major-approval gate — belongs in the org preset, not here. Overriding it
 locally is possible but reintroduces exactly the drift centralizing removed.
 
-## If you forked this
-
-Two things in this repository point at `ninoverse` and will not work as-is:
-
-- `renovate.json` extends `github>ninoverse/.github`. Replace it with your own
-  policy, or point it at your own preset.
-- `.github/workflows/` calls reusable workflows from that same repository. They
-  are public and pinned to `@v1`, so they keep working — see the README for how
-  to vendor them instead.
-
-`SECURITY.md` and the issue forms are **not** in this repository; they come from
-the organization defaults, which a fork does not inherit. Add your own.

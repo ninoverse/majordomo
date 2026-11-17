@@ -1,0 +1,48 @@
+name: Release
+
+# The build lives in ninoverse/.github, like every other workflow here. It runs
+# `just dist <target>` for each target, attaches the binaries to the tag's
+# release with a SHA256SUMS, and writes the conventional-commit changelog.
+#
+# majordomo runs on the platform's x86_64 host under systemd, so one target is
+# all it ships. The `majordomo` binary arrives with the first real crate; until
+# then a release would find nothing to build, so the PRs before it must not cut
+# one (see .agents/commit-conventions.md).
+#
+# The tag this watches for is the one bump-version.yml pushes. That only works
+# because that workflow pushes with a GitHub App token: a tag pushed with
+# GITHUB_TOKEN deliberately does not trigger other workflows, so this would
+# never fire.
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+  # For re-running a release whose assets failed to upload. Pick the tag as the
+  # ref; the workflow reads the tag it was dispatched on, not `main`.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A re-run of the same tag must not race the first. Queue rather than cancel:
+# cancelling between the upload and the release leaves a tag with some of its
+# assets and no release to hold them. It belongs here rather than in the called
+# workflow, where `github.workflow` would still resolve to this caller's name.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # Required here, on the calling job. A called workflow can only downgrade
+    # the permissions it is given, never raise them, so the `contents: write`
+    # its release job asks for is capped by whatever this grants.
+    permissions:
+      contents: write
+    # Pinned to a released version, not @main or a short @v1: @main lands here
+    # with no pull request, and @v1 never moves. Renovate opens the bump.
+    uses: ninoverse/.github/.github/workflows/rust-release.yml@v1.2.2
+    with:
+      binary: majordomo
+      targets: x86_64-unknown-linux-musl

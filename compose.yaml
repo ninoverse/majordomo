@@ -26,16 +26,6 @@ services:
     #   postgres:
     #     condition: service_healthy
 
-  # The built runtime image, for checking the artifact you actually ship.
-  # `docker compose run --rm app`
-  app:
-    build:
-      context: .
-      target: runtime
-      args:
-        BIN: example
-    profiles: [app]
-
   # ---- Backing services. Uncomment what you need. ----
   #
   # postgres:

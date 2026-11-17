@@ -2,16 +2,15 @@
 # access. A bare organization name is not valid — `@ninoverse` is the org that
 # owns this repo, not an owner GitHub can resolve.
 #
-# If you fork this template, replace @nicolapasqua99 throughout. Once the org has
-# a team, prefer @ninoverse/<team-slug>: a team survives people joining and
+# Once the org has a team, prefer @ninoverse/<team-slug>: a team survives people joining and
 # leaving, a personal handle does not.
 
 # Every file, unless overridden below.
 *                       @nicolapasqua99
 
-# The agent rules are the product here — a change changes how every project
-# cloned from this template behaves. They are composed rather than written, so
-# the profile that selects them matters most: it decides the whole tree below.
+# The agent rules decide how every change here is made. They are composed rather
+# than written, so the profile that selects them matters most: it decides the
+# whole tree below.
 /.agentprofile.yml      @nicolapasqua99
 /AGENTS.md              @nicolapasqua99
 /CLAUDE.md              @nicolapasqua99
